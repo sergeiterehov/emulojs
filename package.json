@@ -1,0 +1,16 @@
+{
+  "name": "emulojs",
+  "version": "1.0.0",
+  "description": "Эмуляция логических схем",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "author": "Сергей Терехов",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.1.0",
+    "typescript": "^2.8.4"
+  }
+}
