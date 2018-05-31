@@ -1,17 +1,8 @@
-const emulogic = require('./')
+const { base, elements } = require('./')
+const { atom, arithmetic } = elements
 
-const atom = emulogic.atom
-const arithmetic = emulogic.arithmetic
-
-const not = atom.not
-const and = atom.and
-const or = atom.or
-const xor = atom.xor
-const input = atom.input
-const set = atom.set
-const trace = atom.trace
-const negative = atom.negative
-const positive = atom.positive
+const { input, not, and, or, xor } = atom
+const { set, trace, positive, negative } = base
 
 test('Функция трассировки и простая схема', () => {
     let f = (a, b, c) => and(a, or(b, not(c)))
@@ -35,7 +26,7 @@ test('Полный сумматор, полусумматор', () => {
 
     set(negative, ...a)
 
-    // [a, b, c], [s, c]
+    // [x, y, cIn], [s, c]
     const list = [
         [[positive, positive, negative], [negative, positive]],
         [[positive, negative, positive], [negative, positive]],
@@ -49,5 +40,28 @@ test('Полный сумматор, полусумматор', () => {
 
         expect(adder.s.value).toBe(item[1][0])
         expect(adder.c.value).toBe(item[1][1])
+    })
+})
+
+test('Полный вычитатель, полувычитатель', () => {
+    let a = [input(), input(), input()]
+    let subtractor = arithmetic.FullSubtractor(...a)
+
+    set(negative, ...a)
+
+    // [x, y, bIn], [d, b]
+    const list = [
+        [[positive, positive, negative], [negative, negative]],
+        [[positive, negative, positive], [negative, negative]],
+        [[negative, positive, negative], [positive, positive]],
+        [[negative, negative, positive], [positive, positive]],
+        [[positive, positive, positive], [positive, positive]],
+    ]
+
+    list.forEach(item => {
+        item[0].forEach((item, i) => set(item, a[i]))
+
+        expect(subtractor.d.value).toBe(item[1][0])
+        expect(subtractor.b.value).toBe(item[1][1])
     })
 })

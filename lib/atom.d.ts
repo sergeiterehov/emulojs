@@ -1,5 +1,9 @@
 import { LogicNode } from "./base";
 /**
+ * Узел входа
+ */
+export declare function input(): LogicNode;
+/**
  * Узел НЕ
  *
  * @param a A
@@ -27,28 +31,3 @@ export declare function or(a: LogicNode, b: LogicNode): LogicNode;
  * @param b B
  */
 export declare function xor(a: LogicNode, b: LogicNode): LogicNode;
-/**
- * Узел входа
- */
-export declare function input(): LogicNode;
-/**
- * Положительное значение
- */
-export declare const positive: number[];
-/**
- * Отрицательное значение
- */
-export declare const negative: number[];
-/**
- * Задает значение для узла входа (включая зависимости)
- *
- * @param value Значение
- * @param nodes Узлы
- */
-export declare function set(value: any, ...nodes: LogicNode[]): void;
-/**
- * Выводит структуру и ее значения
- *
- * @param node Узел
- */
-export declare function trace(node: LogicNode): string;

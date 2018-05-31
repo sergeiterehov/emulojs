@@ -1,4 +1,4 @@
-import { LogicNode } from "./base";
+import { LogicNode } from "../base";
 import { not, and, or, xor } from "./atom";
 
 /**
@@ -68,8 +68,11 @@ export function FullAdder(x: LogicNode, y: LogicNode, cIn: LogicNode): AdderOutp
  * @param bIn Операнд займа
  */
 export function FullSubtractor(x: LogicNode, y: LogicNode, bIn: LogicNode): SubtractorOutput {
+    const hs1 = HalfSubtractor(x, y)
+    const hs2 = HalfSubtractor(hs1.d, bIn)
+
     return {
-        d: xor(x, xor(y, bIn)),
-        b: or(and(x, not(bIn)), or(and(x, not(y)), and(y, bIn)))
+        d: hs2.d,
+        b: or(hs1.b, hs2.b)
     }
 }

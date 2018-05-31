@@ -8,3 +8,34 @@ export declare class LogicNode {
     value: any;
     constructor(type: string, inputs: LogicNode[]);
 }
+/**
+ * Положительное значение
+ */
+export declare const positive: number[];
+/**
+ * Отрицательное значение
+ */
+export declare const negative: number[];
+/**
+ * Типы атомарных логических элементов
+ */
+export declare enum LogicElement {
+    Input = "input",
+    Not = "not",
+    And = "and",
+    Or = "or",
+    Xor = "xor",
+}
+/**
+ * Задает значение для узла входа (включая зависимости)
+ *
+ * @param value Значение
+ * @param nodes Узлы
+ */
+export declare function set(value: any, ...nodes: LogicNode[]): void;
+/**
+ * Выводит структуру и ее значения
+ *
+ * @param node Узел
+ */
+export declare function trace(node: LogicNode): string;
