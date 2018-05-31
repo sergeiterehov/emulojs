@@ -6,35 +6,70 @@ import { not, and, or, xor } from "./atom";
  */
 export type AdderOutput = {
     s: LogicNode,
-    c: LogicNode,
+    c: LogicNode
+}
+
+/**
+ * Выход вычитателя
+ */
+export type SubtractorOutput = {
+    d: LogicNode,
+    b: LogicNode
 }
 
 /**
  * Полусумматор
  *
- * @param a A
- * @param b B
+ * @param x Первый операнд
+ * @param y Второй операнд
  */
-export function HalfAdder(a: LogicNode, b: LogicNode): AdderOutput {
+export function HalfAdder(x: LogicNode, y: LogicNode): AdderOutput {
     return {
-        s: xor(a, b),
-        c: and(a, b)
+        s: xor(x, y),
+        c: and(x, y)
+    }
+}
+
+/**
+ * Полувычитатель
+ *
+ * @param x Первый операнд
+ * @param y Второй операнд
+ */
+export function HalfSubtractor(x: LogicNode, y: LogicNode): SubtractorOutput {
+    return {
+        d: xor(x, y),
+        b: and(not(x), y)
     }
 }
 
 /**
  * Полный сумматор
  *
- * @param a A
- * @param b B
- * @param c Cin
+ * @param x Первый операнд
+ * @param y Второй операнд
+ * @param cIn Операнд переноса
  */
-export function FullAdder(a: LogicNode, b: LogicNode, c: LogicNode): AdderOutput {
-    const ha1 = HalfAdder(a, b)
-    const ha2 = HalfAdder(ha1.s, c)
+export function FullAdder(x: LogicNode, y: LogicNode, cIn: LogicNode): AdderOutput {
+    const ha1 = HalfAdder(x, y)
+    const ha2 = HalfAdder(ha1.s, cIn)
 
     return {
         s: ha2.s,
         c: or(ha1.c, ha2.c)
+    }
+}
+
+/**
+ * Полный вычитатель
+ *
+ * @param x Первый операнд
+ * @param y Второй операнд
+ * @param bIn Операнд займа
+ */
+export function FullSubtractor(x: LogicNode, y: LogicNode, bIn: LogicNode): SubtractorOutput {
+    return {
+        d: xor(x, xor(y, bIn)),
+        b: or(and(x, not(bIn)), or(and(x, not(y)), and(y, bIn)))
     }
 }
