@@ -3,7 +3,7 @@ const { atom, arithmetic, latch } = elements
 
 const { input, not, and, or, xor } = atom
 const { set, trace, positive, negative } = base
-const { LatchRS } = latch
+const { LatchRS, LatchD } = latch
 
 test('Функция трассировки и простая схема', () => {
     let f = (a, b, c) => and(a, or(b, not(c)))
@@ -68,19 +68,44 @@ test('Полный вычитатель, полувычитатель', () => {
 })
 
 test('Триггер RS', () => {
-    let a = [input(), input()]
-    let rs = LatchRS(a[0], a[1])
+    let r = input()
+    let s = input()
+    let rs = LatchRS(r, s)
 
-    set(negative, ...a)
+    set(negative, ...[r, s])
 
-    set(positive, a[1])
-    set(negative, a[1])
+    set(positive, s)
+    set(negative, s)
 
     expect(rs.Q.value).toBe(positive)
     expect(rs.NotQ.value).toBe(negative)
 
-    set(positive, a[0])
-    set(negative, a[0])
+    set(positive, r)
+    set(negative, r)
+
+    expect(rs.Q.value).toBe(negative)
+    expect(rs.NotQ.value).toBe(positive)
+})
+
+test('Триггер D', () => {
+    let d = input()
+    let e = input()
+    let rs = LatchD(d, e)
+
+    set(negative, ...[d, e])
+
+    set(positive, d)
+    set(positive, e)
+    set(negative, e)
+    set(negative, d)
+
+    expect(rs.Q.value).toBe(positive)
+    expect(rs.NotQ.value).toBe(negative)
+
+    set(negative, d)
+    set(positive, e)
+    set(negative, e)
+    set(negative, d)
 
     expect(rs.Q.value).toBe(negative)
     expect(rs.NotQ.value).toBe(positive)
