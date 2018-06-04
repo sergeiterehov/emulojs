@@ -1,8 +1,9 @@
 const { base, elements } = require('./')
-const { atom, arithmetic } = elements
+const { atom, arithmetic, latch } = elements
 
 const { input, not, and, or, xor } = atom
 const { set, trace, positive, negative } = base
+const { LatchRS } = latch
 
 test('Функция трассировки и простая схема', () => {
     let f = (a, b, c) => and(a, or(b, not(c)))
@@ -64,4 +65,23 @@ test('Полный вычитатель, полувычитатель', () => {
         expect(subtractor.d.value).toBe(item[1][0])
         expect(subtractor.b.value).toBe(item[1][1])
     })
+})
+
+test('Триггер RS', () => {
+    let a = [input(), input()]
+    let rs = LatchRS(a[0], a[1])
+
+    set(negative, ...a)
+
+    set(positive, a[1])
+    set(negative, a[1])
+
+    expect(rs.Q.value).toBe(positive)
+    expect(rs.NotQ.value).toBe(negative)
+
+    set(positive, a[0])
+    set(negative, a[0])
+
+    expect(rs.Q.value).toBe(negative)
+    expect(rs.NotQ.value).toBe(positive)
 })

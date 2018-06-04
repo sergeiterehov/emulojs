@@ -15,7 +15,21 @@ export class LogicNode {
 
         this.value = null
 
-        inputs.forEach(item => item.links.push(this))
+        inputs.filter(item => !! item).forEach(item => item.links.push(this))
+    }
+
+    /**
+     * Позднее связывание элементов
+     *
+     * @param input Индекс входа
+     * @param node Узел
+     */
+    connect(input: number, node: LogicNode): LogicNode {
+        this.inputs[input] = node
+
+        node.links.push(this)
+
+        return this
     }
 }
 

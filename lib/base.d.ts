@@ -7,6 +7,13 @@ export declare class LogicNode {
     links: LogicNode[];
     value: any;
     constructor(type: string, inputs: LogicNode[]);
+    /**
+     * Позднее связывание элементов
+     *
+     * @param input Индекс входа
+     * @param node Узел
+     */
+    connect(input: number, node: LogicNode): LogicNode;
 }
 /**
  * Положительное значение
